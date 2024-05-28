@@ -14,6 +14,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: background-color 0.3s ease;
     }
 
     .container {
@@ -23,6 +24,7 @@
         background: rgba(255, 255, 255, 0.9);
         border-radius: 20px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: filter 0.3s ease;
     }
 
     .navbar {
@@ -98,6 +100,55 @@
 
     #loginForm {
         display: none;
+        position: absolute;
+        top: -100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: top 0.3s ease, filter 0.3s ease;
+        z-index: 1;
+    }
+
+    #loginForm.active {
+        top: 50px;
+        filter: blur(5px);
+    }
+
+    #loginForm input {
+        display: block;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        width: 100%;
+    }
+
+    #loginForm button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    #loginButton {
+        display: block;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #loginButton:hover {
+        background-color: #45a049;
     }
 
     /* Dark Mode Styles */
@@ -114,6 +165,7 @@
         <a href="#" class="active">Home</a>
         <a href="#">About</a>
         <a href="#">Contact</a>
+        <button id="loginButton" onclick="toggleLoginForm()">Sign In</button>
         <a href="javascript:void(0);" class="icon" onclick="toggleNavbar()">
             &#9776;
         </a>
@@ -153,22 +205,21 @@
         navbar.classList.toggle('responsive');
     }
 
+    // Toggle login form
+    function toggleLoginForm() {
+        const loginForm = document.getElementById('loginForm');
+        loginForm.classList.toggle('active');
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
         const messagesList = document.getElementById('messages');
-        const loginForm = document.getElementById('loginForm');
+        const loginButton = document.getElementById('loginButton');
 
         // Load messages from local storage
         const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
-        savedMessages.slice(-8).forEach(message => addMessage(message.text, message.user));
-
-        // Check if user is signed in
-        const isSignedIn = localStorage.getItem('signedIn') === 'true';
-        if (!isSignedIn) {
-            loginForm.style.display = 'block';
-            document.getElementById('chatForm').style.display = 'none';
-        }
+        savedMessages.forEach(message => addMessage(message.text, message.user));
 
         function addMessage(text, user) {
             const li = document.createElement('li');
@@ -200,13 +251,16 @@
                 sendButton.disabled = true;
             }
         });
+
+        loginButton.addEventListener('click', function() {
+            toggleLoginForm();
+        });
     });
 
     function signIn() {
         // Placeholder function for signing in
         localStorage.setItem('signedIn', 'true');
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('chatForm').style.display = 'block';
+        toggleLoginForm();
     }
 
     function createAccount() {
