@@ -62,15 +62,42 @@
         background-color: #f1f1f1;
         padding: 10px;
         border-radius: 10px;
+        word-wrap: break-word;
     }
 
-    #darkModeButton {
-        background-color: green;
-        color: #ffffff;
+    #messages li.user:before {
+        content: attr(data-user) ": ";
+        font-weight: bold;
+    }
+
+    #chatForm {
+        display: flex;
+        margin-top: 20px;
+    }
+
+    #messageInput {
+        flex: 1;
+        padding: 10px;
         border: none;
+        border-radius: 10px 0 0 10px;
+    }
+
+    #sendButton {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 0 10px 10px 0;
         cursor: pointer;
-        font-size: 16px;
-        z-index: 999; /* Ensure button is on top */
+    }
+
+    #sendButton:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    #loginForm {
+        display: none;
     }
 
     /* Dark Mode Styles */
@@ -134,7 +161,7 @@
 
         // Load messages from local storage
         const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
-        savedMessages.forEach(message => addMessage(message));
+        savedMessages.slice(-8).forEach(message => addMessage(message.text, message.user));
 
         // Check if user is signed in
         const isSignedIn = localStorage.getItem('signedIn') === 'true';
@@ -143,9 +170,13 @@
             document.getElementById('chatForm').style.display = 'none';
         }
 
-        function addMessage(message) {
+        function addMessage(text, user) {
             const li = document.createElement('li');
-            li.textContent = message;
+            li.textContent = text;
+            if (user) {
+                li.classList.add('user');
+                li.setAttribute('data-user', user);
+            }
             messagesList.appendChild(li);
         }
 
@@ -163,8 +194,8 @@
             event.preventDefault();
             const message = messageInput.value.trim();
             if (message !== '') {
-                addMessage(message);
-                saveMessage(message);
+                addMessage(message, 'You');
+                saveMessage({ text: message, user: 'You' });
                 messageInput.value = '';
                 sendButton.disabled = true;
             }
