@@ -25,6 +25,7 @@
         border-radius: 20px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         transition: filter 0.3s ease;
+        position: relative;
     }
 
     .navbar {
@@ -99,11 +100,10 @@
     }
 
     #loginForm {
-        display: none;
         position: absolute;
         top: -100%;
-        left: 0;
-        right: 0;
+        left: 50%;
+        transform: translateX(-50%);
         background: rgba(255, 255, 255, 0.9);
         padding: 20px;
         border-radius: 20px;
@@ -114,7 +114,6 @@
 
     #loginForm.active {
         top: 50px;
-        filter: blur(5px);
     }
 
     #loginForm input {
@@ -165,7 +164,7 @@
         <a href="#" class="active">Home</a>
         <a href="#">About</a>
         <a href="#">Contact</a>
-        <button id="loginButton" onclick="toggleLoginForm()">Sign In</button>
+        <button id="loginButton">Sign In</button>
         <a href="javascript:void(0);" class="icon" onclick="toggleNavbar()">
             &#9776;
         </a>
