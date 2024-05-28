@@ -58,6 +58,7 @@
     #messages {
         list-style-type: none;
         padding: 0;
+        margin: 0;
     }
 
     #messages li {
@@ -215,6 +216,7 @@
         const sendButton = document.getElementById('sendButton');
         const messagesList = document.getElementById('messages');
         const loginButton = document.getElementById('loginButton');
+        const usernameInput = document.getElementById('usernameInput');
 
         // Load messages from local storage
         const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
@@ -244,8 +246,8 @@
             event.preventDefault();
             const message = messageInput.value.trim();
             if (message !== '') {
-                addMessage(message, 'You');
-                saveMessage({ text: message, user: 'You' });
+                addMessage(message, usernameInput.value || 'You');
+                saveMessage({ text: message, user: usernameInput.value || 'You' });
                 messageInput.value = '';
                 sendButton.disabled = true;
             }
