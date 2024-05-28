@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat Form</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        transition: background-color 0.3s ease;
+    }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    #messages {
+        list-style-type: none;
+        padding: 0;
+    }
+    #messages li {
+        margin-bottom: 10px;
+        background-color: #f1f1f1;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    #darkModeButton {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: transparent;
+        color: #ffffff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+
+<button id="darkModeButton" onclick="toggleDarkMode()">Dark Mode</button>
+
+<div class="container">
+    <ul id="messages"></ul>
+    <form id="chatForm">
+        <input type="text" id="messageInput" placeholder="Type your message...">
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<script>
+    function toggleDarkMode() {
+        const body = document.body;
+        body.classList.toggle('dark-mode');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const messageInput = document.getElementById('messageInput');
+        const chatForm = document.getElementById('chatForm');
+        const messagesList = document.getElementById('messages');
+
+        chatForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const message = messageInput.value.trim();
+            if (message !== '') {
+                addMessage(message);
+                messageInput.value = '';
+            }
+        });
+
+        function addMessage(message) {
+            const li = document.createElement('li');
+            li.textContent = message;
+            messagesList.appendChild(li);
+        }
+    });
+</script>
+
+</body>
+</html>
