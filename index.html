@@ -35,6 +35,12 @@
         border: none;
         cursor: pointer;
         font-size: 16px;
+        z-index: 999; /* Ensure button is on top */
+    }
+    /* Dark Mode Styles */
+    .dark-mode {
+        background-color: #1f1f1f;
+        color: #ffffff;
     }
 </style>
 </head>
@@ -51,9 +57,18 @@
 </div>
 
 <script>
+    // Check if dark mode is enabled and apply it
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+    }
+
+    // Function to toggle dark mode
     function toggleDarkMode() {
         const body = document.body;
         body.classList.toggle('dark-mode');
+        const isDarkMode = body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDarkMode);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -61,11 +76,16 @@
         const chatForm = document.getElementById('chatForm');
         const messagesList = document.getElementById('messages');
 
+        // Load messages from local storage
+        const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+        savedMessages.forEach(message => addMessage(message));
+
         chatForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const message = messageInput.value.trim();
             if (message !== '') {
                 addMessage(message);
+                saveMessage(message);
                 messageInput.value = '';
             }
         });
@@ -74,6 +94,12 @@
             const li = document.createElement('li');
             li.textContent = message;
             messagesList.appendChild(li);
+        }
+
+        function saveMessage(message) {
+            const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+            savedMessages.push(message);
+            localStorage.setItem('messages', JSON.stringify(savedMessages));
         }
     });
 </script>
